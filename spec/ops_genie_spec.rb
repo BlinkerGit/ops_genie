@@ -6,6 +6,7 @@ describe OpsGenie do
       OpsGenie.configure do |config|
         config.api_key = "key"
         config.base_url = 'https://api.opsgenie.com/'
+        config.send_alerts = true
       end
     end
 
@@ -38,9 +39,8 @@ describe OpsGenie do
       end
 
       context "the release_stage is not in the alert_release_stages" do
-        before do 
-          OpsGenie.configuration.release_stage = "dev"
-          OpsGenie.configuration.alert_release_stages = ["staging", "production"]
+        before do
+          OpsGenie.configuration.send_alerts = false
         end
 
         it "shouldn't send alerts" do

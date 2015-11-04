@@ -2,9 +2,7 @@ module OpsGenie
 	module Helper
 
 		def should_alert?
-      OpsGenie.configuration.release_stage.nil? || 
-      OpsGenie.configuration.alert_release_stages.nil? || 
-      OpsGenie.configuration.alert_release_stages.include?(OpsGenie.configuration.release_stage)
+      OpsGenie.configuration.send_alerts
     end
 
 	  def http_post endpoint, params
