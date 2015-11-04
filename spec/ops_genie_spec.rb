@@ -14,9 +14,13 @@ describe OpsGenie do
 
       before do
         stub_request(:post, "https://api.opsgenie.com/v1/json/alert").with(:body => "{\"message\":\"hello\",\"apiKey\":\"key\"}").to_return(:status => 200, :body => "{\"status\":\"successful\"}", :headers => {})
-        
+
         stub_request(:post, "https://api.opsgenie.com/v1/json/alert")
           .with(:body => "{\"message\":\"hello\",\"randomField\":\"hello\",\"details\":{\"someDetails\":\"hello\"},\"apiKey\":\"key\"}")
+          .to_return(:status => 200, :body => "{\"status\":\"successful\"}", :headers => {})
+
+        stub_request(:post, "https://api.opsgenie.com/v1/json/alert")
+          .with(:body => "{\"message\":\"hello\",\"teams\":[\"API\",\"Support\"],\"apiKey\":\"key\"}")
           .to_return(:status => 200, :body => "{\"status\":\"successful\"}", :headers => {})
       end
 
@@ -35,7 +39,10 @@ describe OpsGenie do
           expect(OpsGenie).to have_sent_alert{ |payload| expect(payload["randomField"]).to eq("hello") }
         end
 
-
+        it 'sends a list of teams to be alerted' do
+          OpsGenie::Alert.create({message: "hello", teams: ['API', 'Support']})
+          expect(OpsGenie).to have_sent_alert{ |payload| expect(payload["teams"]).to eq(['API', 'Support']) }
+        end
       end
 
       context "the release_stage is not in the alert_release_stages" do

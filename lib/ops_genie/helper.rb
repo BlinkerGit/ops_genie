@@ -12,21 +12,11 @@ module OpsGenie
 	    JSON.parse(http.post(uri.path, ops_params(params)).body)
 	  end
 
-	  private 		
+	  private
+
 	  def ops_params params
 	  	params.merge!(api_key: OpsGenie.configuration.api_key)
-	  	camelize_keys_recursive!(params).to_json
+	  	HashConverter.to_camel_case(params).to_json
 	  end
-
-		def camelize_keys_recursive!(hash)
-	    if hash.is_a?(Array)
-	      hash.each {|h| h.camelize_lower_keys!} 
-	    else
-	      hash.camelize_lower_keys!
-	      hash.each { |k, v|  camelize_keys_recursive!(v) if (v.is_a?(Hash) || v.is_a?(Array)) }
-	    end
-	    hash
-  	end
-
 	end
 end

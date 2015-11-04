@@ -1,4 +1,5 @@
 require "ops_genie/helper"
+require "ops_genie/hash_converter"
 require "ops_genie/alert"
 
 module OpsGenie
