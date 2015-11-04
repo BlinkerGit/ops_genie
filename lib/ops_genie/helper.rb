@@ -1,5 +1,3 @@
-require "core_extensions/string"
-require "core_extensions/hash"
 module OpsGenie
 	module Helper
 
