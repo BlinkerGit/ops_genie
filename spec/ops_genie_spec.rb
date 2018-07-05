@@ -12,26 +12,25 @@ describe OpsGenie do
 
     describe OpsGenie::Alert do
       let(:requests) {[
-        '{"message":"hello","apiKey":"key"}',
-        '{"message":"hello","description":"a common greeting","apiKey":"key"}',
-        '{"message":"hello","randomField":"hello","details":{"someDetails":"hello"},"apiKey":"key"}',
-        '{"message":"hello","responders":[{"name":"API","type":"team"},{"name":"Support","type":"team"}],"apiKey":"key"}',
+        '{"message":"hello"}',
+        '{"message":"hello","description":"a common greeting"}',
+        '{"message":"hello","randomField":"hello","details":{"someDetails":"hello"}}',
+        '{"message":"hello","responders":[{"name":"API","type":"team"},{"name":"Support","type":"team"}]}',
       ]}
 
       before do
         requests.each do |body|
           stub_request(:post, 'https://api.opsgenie.com/v2/alerts')
-            .with(body: body)
+            .with(body: body, headers: { "Authorization" => "GenieKey key" })
             .to_return(status: 200, body: '{"status":"successful"}', headers: {})
         end
       end
 
       context 'the alert_release_stages is not configured' do
-        it 'sends a request to the api with a message and an api_key' do
+        it 'sends a request to the api with a message' do
           OpsGenie::Alert.create(message: 'hello')
 
           expect(OpsGenie).to have_sent_alert { |payload|
-            expect(payload['apiKey']).to eq('key')
             expect(payload['message']).to eq('hello')
           }
         end
