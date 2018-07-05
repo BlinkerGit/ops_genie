@@ -3,14 +3,14 @@ require "ops_genie/hash_converter"
 require "ops_genie/alert"
 
 module OpsGenie
-	class Configuration; attr_accessor :api_key, :base_url, :send_alerts; end
+  class Configuration; attr_accessor :api_key, :base_url, :send_alerts; end
 
   class << self
     attr_accessor :configuration
 
-	  def configure
-	    self.configuration ||= Configuration.new
-	    yield(configuration)
-	  end
-	end
+    def configure
+      self.configuration ||= Configuration.new
+      yield(configuration)
+    end
+  end
 end

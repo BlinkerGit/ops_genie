@@ -20,7 +20,7 @@ module HashConverter
     private
 
     def lower_camelize(string)
-		  string.gsub(/_(.)/) {|e| $1.upcase}
-	  end
+      string.gsub(/_(.)/) {|e| $1.upcase}
+    end
   end
 end
